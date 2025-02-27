@@ -19,9 +19,12 @@ public class UserService {
     private UserRepository userRepository;
     private RoleRepository roleRepository;
 
-    public UserService(UserRepository userRepository, RoleRepository roleRepository) {
+    private KafkaProducer kafkaProducer;
+
+    public UserService(UserRepository userRepository, RoleRepository roleRepository,KafkaProducer kafkaProducer) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.kafkaProducer = kafkaProducer;
     }
 
     public ResponseEntity<UserDto> getUser(Long userId){
@@ -43,6 +46,7 @@ public class UserService {
         User user = userOptional.get();
         user.setRole(new HashSet<>(roles));
         User savedUser = userRepository.save(user);
+        kafkaProducer.sendMessage("user-registration","New user registered:"+savedUser.getEmail());
         return UserDto.from(savedUser);
     }
 }
