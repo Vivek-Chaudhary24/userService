@@ -122,6 +122,7 @@ public class AuthService {
         //headers.add(HttpHeaders.SET_COOKIE,"auth-token:"+jws);
         headers.add("Content-Type", "application/json");
         ResponseEntity<UserDto> response = new ResponseEntity<>(userDto,headers, HttpStatus.OK);
+        kafkaProducer.sendMessage("login-id","The user has been logged in "+userDto.getEmail());
         return response;
 
     }
