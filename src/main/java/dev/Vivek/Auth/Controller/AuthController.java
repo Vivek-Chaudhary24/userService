@@ -50,7 +50,7 @@ public class AuthController {
     public String check(){
         RestTemplate restTemplate = new RestTemplate();
         String url= "http://localhost:5000/api/python/check";
-       System.out.println("In python api");
+       System.out.println("checking python");
         return restTemplate.getForObject(url,String.class);
 
        // return "App is working fine";
